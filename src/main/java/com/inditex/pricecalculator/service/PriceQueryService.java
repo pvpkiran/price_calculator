@@ -2,6 +2,7 @@ package com.inditex.pricecalculator.service;
 
 import com.inditex.pricecalculator.dto.PriceQueryRequestDto;
 import com.inditex.pricecalculator.dto.PriceQueryResponseDto;
+import com.inditex.pricecalculator.exception.NoPricesFoundException;
 import com.inditex.pricecalculator.model.Prices;
 import com.inditex.pricecalculator.repository.PricesRepository;
 
@@ -31,7 +32,7 @@ public class PriceQueryService {
             );
 
         if(prices.isEmpty()) {
-            // TODO : Is this possible ? If yes, send some default price or throw Exception?
+            throw new NoPricesFoundException("No price found for given product, brand and date");
         }
         if (prices.size() > 1) {
             log.info("Found multiple prices for given date {}", priceQueryRequestDto.getDate());

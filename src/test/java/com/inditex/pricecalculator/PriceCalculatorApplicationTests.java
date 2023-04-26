@@ -31,7 +31,7 @@ class PriceCalculatorApplicationTests {
 
     @Test
     public void testPriceQueryForSinglePriceScenarioBeforeSale() throws Exception {
-        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(14, 10);
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2020, 14, 10);
 
         verifyRestStatusAndResponseBody(priceQueryRequestDto, """
             {
@@ -46,7 +46,7 @@ class PriceCalculatorApplicationTests {
 
     @Test
     public void testPriceQueryForMultiplePriceScenarioDuringSale() throws Exception {
-        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(14, 16);
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2020, 14, 16);
 
         verifyRestStatusAndResponseBody(priceQueryRequestDto, """
             {
@@ -61,7 +61,7 @@ class PriceCalculatorApplicationTests {
 
     @Test
     public void testPriceQueryForMultiplePriceScenarioAfterSale() throws Exception {
-        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(14, 21);
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2020, 14, 21);
 
         verifyRestStatusAndResponseBody(priceQueryRequestDto, """
             {
@@ -76,7 +76,7 @@ class PriceCalculatorApplicationTests {
 
     @Test
     public void testPriceQueryForMultiplePriceScenarioWithDifferentPriceList() throws Exception {
-        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(15, 10);
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2020, 15, 10);
 
         verifyRestStatusAndResponseBody(priceQueryRequestDto, """
             {
@@ -91,7 +91,7 @@ class PriceCalculatorApplicationTests {
 
     @Test
     public void testPriceQueryForSinglePriceScenarioWithDifferentPriceList() throws Exception {
-        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(16, 21);
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2020, 16, 21);
 
         verifyRestStatusAndResponseBody(priceQueryRequestDto, """
             {
@@ -104,11 +104,21 @@ class PriceCalculatorApplicationTests {
             }""");
     }
 
-    private PriceQueryRequestDto getPriceQueryRequestDto(int dayOfTheMonth, int hour) {
+    @Test
+    public void testForNonExistentPricePeriod() throws Exception {
+        final PriceQueryRequestDto priceQueryRequestDto = getPriceQueryRequestDto(2023, 16, 21);
+
+        mockMvc.perform(post("/price/query")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(priceQueryRequestDto)))
+            .andExpect(status().isNotFound());
+    }
+
+    private PriceQueryRequestDto getPriceQueryRequestDto(int year, int dayOfTheMonth, int hour) {
         return PriceQueryRequestDto.builder()
             .productId(35455)
             .brandName("ZARA")
-            .date(LocalDateTime.of(2020, 6, dayOfTheMonth, hour, 0, 0))
+            .date(LocalDateTime.of(year, 6, dayOfTheMonth, hour, 0, 0))
             .build();
     }
 
