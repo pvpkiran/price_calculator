@@ -1,0 +1,9 @@
+###
+POST http://localhost:9999/price/query
+Content-Type: application/json
+
+{
+  "brandName" : "ZARA",
+  "productId" : "35455",
+  "date"      : "2020-06-15T19:00:00"
+}
