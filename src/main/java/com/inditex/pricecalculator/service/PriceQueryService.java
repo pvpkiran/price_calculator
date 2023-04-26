@@ -5,7 +5,6 @@ import com.inditex.pricecalculator.dto.PriceQueryResponseDto;
 import com.inditex.pricecalculator.model.Prices;
 import com.inditex.pricecalculator.repository.PricesRepository;
 
-import java.util.Comparator;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
@@ -25,14 +24,16 @@ public class PriceQueryService {
 
     public PriceQueryResponseDto getApplicablePrice(final PriceQueryRequestDto priceQueryRequestDto) {
         final List<Prices> prices =
-            pricesRepository.findByBrand_BrandNameAndProduct_ProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(priceQueryRequestDto.getBrandName(),
+            pricesRepository.findByBrand_BrandNameAndProduct_ProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(priceQueryRequestDto.getBrandName(),
                 priceQueryRequestDto.getProductId(),
                 priceQueryRequestDto.getDate(),
                 priceQueryRequestDto.getDate()
             );
 
+        if(prices.isEmpty()) {
+            // TODO : Is this possible ? If yes, send some default price or throw Exception?
+        }
         if (prices.size() > 1) {
-            prices.sort(Comparator.comparingInt(Prices::getPriority).reversed());
             log.info("Found multiple prices for given date {}", priceQueryRequestDto.getDate());
         }
 
@@ -40,6 +41,7 @@ public class PriceQueryService {
         return buildPriceQueryResponse(priceQueryRequestDto, price, PriceQueryResponseDto.builder());
     }
 
+    //TODO : mapstruct can be used for mapping fields to reduce boiler plate code
     private PriceQueryResponseDto buildPriceQueryResponse(final PriceQueryRequestDto priceQueryRequestDto,
                                                           final Prices price,
                                                           final PriceQueryResponseDto.PriceQueryResponseDtoBuilder builder) {
