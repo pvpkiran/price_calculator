@@ -1,16 +1,9 @@
 package com.inditex.pricecalculator.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.time.LocalDateTime;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,24 +17,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Prices {
+public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq_gen")
     @SequenceGenerator(sequenceName = "product_seq", allocationSize = 1, name = "product_seq_gen")
     private long id;
 
-    private int priceList;
-    private int priority;
-    private String curr;
-    private double price;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Brand brand;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Product product;
+    private String productName;
+    private int productId;
 }
