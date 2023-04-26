@@ -26,8 +26,8 @@ import lombok.Setter;
 @Builder
 public class Prices {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq_gen")
-    @SequenceGenerator(sequenceName = "product_seq", allocationSize = 1, name = "product_seq_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prices_seq_gen")
+    @SequenceGenerator(sequenceName = "prices_seq", allocationSize = 1, name = "prices_seq_gen")
     private long id;
 
     private int priceList;
