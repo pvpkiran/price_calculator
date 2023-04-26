@@ -50,4 +50,9 @@ CREATE TABLE prices
     curr       character varying(3),
     start_date timestamp without time zone,
     end_date   timestamp without time zone,
+    brand_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    CONSTRAINT prices_pk_id PRIMARY KEY (id),
+    CONSTRAINT prices_product_fk_id foreign key (product_id) references product,
+    CONSTRAINT prices_brand_fk_id foreign key (brand_id) references brand
 );

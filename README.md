@@ -1,6 +1,6 @@
 # Price Calculator
  Given a product and brand, the service will return the price applicable on a specific day. 
- The services expose a REST endpoint to facilitate this.
+ The service expose a REST endpoint to facilitate this.
 
 ### Components Used
 
